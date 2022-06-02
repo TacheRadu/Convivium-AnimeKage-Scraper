@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ak-scraper
+  labels:
+    app: ak-scraper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ak-scraper
+  template:
+    metadata:
+      labels:
+        app: ak-scraper
+    spec:
+      containers:
+      - name: ak-scraper
+        image: rtache76/convivium-ak-scraper:latest
