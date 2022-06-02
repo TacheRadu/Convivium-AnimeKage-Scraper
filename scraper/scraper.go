@@ -95,5 +95,40 @@ func GetAnime(url string, pageNumber int) types.Anime {
 
 func GetPlayerData(url string) types.PlayerData {
 	var res types.PlayerData
+	c := colly.NewCollector(
+		colly.AllowedDomains("ak476.anime-kage.eu"),
+	)
+	c.DetectCharset = true
+	c.OnHTML(".col-12.col-md-4.left-center-desktop", func(div *colly.HTMLElement) {
+		res.PrevEpisode = div.Request.AbsoluteURL(div.ChildAttr("a", "href"))
+	})
+	c.OnHTML(".col-12.col-md-4.center", func(div *colly.HTMLElement) {
+		if div.ChildAttr("a", "href") != "" {
+			res.AnimeLink = div.Request.AbsoluteURL(div.ChildAttr("a", "href"))
+		}
+	})
+	c.OnHTML(".col-12.col-md-4.right-center-desktop", func(div *colly.HTMLElement) {
+		if div.ChildAttr("a", "href") != "" {
+			res.NextEpisode = div.Request.AbsoluteURL(div.ChildAttr("a", "href"))
+		}
+	})
+	c.OnHTML(".news-title", func(div *colly.HTMLElement) {
+		i := strings.Index(div.Text, "Ep.")
+		if i != -1 {
+			res.EpisodeNumber = strings.Trim(div.Text[i+3:], " \n")
+		}
+	})
+	c.OnHTML("#source15", func(div *colly.HTMLElement) {
+		d := colly.NewCollector()
+		d.DetectCharset = true
+		d.OnHTML("source", func(h *colly.HTMLElement) {
+			res.Servers = append(res.Servers, types.Server{
+				Title: "Source 15",
+				Link:  h.Attr("src"),
+			})
+		})
+		d.Visit(div.ChildAttr("iframe", "data-src"))
+	})
+	c.Visit(url)
 	return res
 }
