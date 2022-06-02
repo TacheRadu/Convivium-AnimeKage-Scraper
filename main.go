@@ -36,9 +36,9 @@ func getAnime(ec *nats.EncodedConn, m *nats.Msg) {
 	fmt.Println(string(m.Data))
 	pageNumber, err := strconv.Atoi(data.Data.PageNumber)
 	if err != nil {
-		ec.Publish(m.Reply, scraper.GetAnime(data.Data.Url, pageNumber))
-	} else {
 		ec.Publish(m.Reply, scraper.GetAnime(data.Data.Url, 0))
+	} else {
+		ec.Publish(m.Reply, scraper.GetAnime(data.Data.Url, pageNumber))
 	}
 }
 
