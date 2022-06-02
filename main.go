@@ -51,7 +51,7 @@ func getPlayerData(ec *nats.EncodedConn, m *nats.Msg) {
 
 func main() {
 	// Connect to a server
-	nc, err := nats.Connect("localhost:31258",
+	nc, err := nats.Connect("nats.default.svc:4222",
 		nats.RetryOnFailedConnect(true),
 		nats.MaxReconnects(10),
 		nats.ReconnectWait(time.Second*3),
