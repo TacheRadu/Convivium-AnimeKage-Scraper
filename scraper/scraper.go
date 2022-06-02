@@ -20,18 +20,35 @@ func GetRecentAnime(pageNumber int) []types.AnimeEpisode {
 				nameAndEpisode := div.ChildText(".news-title")
 				id := strings.Index(nameAndEpisode, "Ep.")
 				if id == -1 {
-					res = append(res, types.AnimeEpisode{
-						ImageLink: div.ChildAttr("img", "data-src"),
-						AnimeName: nameAndEpisode,
-						Link:      e.Request.AbsoluteURL(div.ChildAttr("a", "href")),
-					})
+					if div.ChildAttr("img", "src") == "" {
+						res = append(res, types.AnimeEpisode{
+							ImageLink: div.ChildAttr("img", "data-src"),
+							AnimeName: nameAndEpisode,
+							Link:      e.Request.AbsoluteURL(div.ChildAttr("a", "href")),
+						})
+					} else {
+						res = append(res, types.AnimeEpisode{
+							ImageLink: div.ChildAttr("img", "src"),
+							AnimeName: nameAndEpisode,
+							Link:      e.Request.AbsoluteURL(div.ChildAttr("a", "href")),
+						})
+					}
 				} else {
-					res = append(res, types.AnimeEpisode{
-						ImageLink:     div.ChildAttr("img", "data-src"),
-						AnimeName:     nameAndEpisode[:id],
-						EpisodeNumber: nameAndEpisode[id:],
-						Link:          e.Request.AbsoluteURL(div.ChildAttr("a", "href")),
-					})
+					if div.ChildAttr("img", "src") == "" {
+						res = append(res, types.AnimeEpisode{
+							ImageLink:     div.ChildAttr("img", "data-src"),
+							AnimeName:     nameAndEpisode,
+							EpisodeNumber: nameAndEpisode[id:],
+							Link:          e.Request.AbsoluteURL(div.ChildAttr("a", "href")),
+						})
+					} else {
+						res = append(res, types.AnimeEpisode{
+							ImageLink:     div.ChildAttr("img", "src"),
+							AnimeName:     nameAndEpisode,
+							EpisodeNumber: nameAndEpisode[id:],
+							Link:          e.Request.AbsoluteURL(div.ChildAttr("a", "href")),
+						})
+					}
 				}
 			}
 		})
@@ -57,11 +74,11 @@ func GetAnime(url string, pageNumber int) types.Anime {
 			// first is episode list, this is with details:
 			if i == 1 {
 				h.ForEach(".row", func(index int, row *colly.HTMLElement) {
-					if index == 1 {
+					if strings.Trim(row.ChildText(".right-left-desktop"), " \n") == "Genuri:" {
 						res.Genres = strings.Split(row.ChildText(".left"), ", ")
-					} else if index == 4 {
+					} else if strings.Trim(row.ChildText(".right-left-desktop"), " \n") == "Descriere:" {
 						res.Summary = row.ChildText(".left")
-					} else if index == 6 {
+					} else if strings.Trim(row.ChildText(".right-left-desktop"), " \n") == "Data lansării:" {
 						res.Year = row.ChildText(".left")
 					}
 				})
