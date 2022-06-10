@@ -35,14 +35,14 @@ func GetRecentAnime(pageNumber int) []types.AnimeEpisode {
 					if div.ChildAttr("img", "src") == "" {
 						res = append(res, types.AnimeEpisode{
 							ImageLink:     div.ChildAttr("img", "data-src"),
-							AnimeName:     nameAndEpisode,
+							AnimeName:     nameAndEpisode[:id],
 							EpisodeNumber: nameAndEpisode[id:],
 							Link:          e.Request.AbsoluteURL(div.ChildAttr("a", "href")),
 						})
 					} else {
 						res = append(res, types.AnimeEpisode{
 							ImageLink:     div.ChildAttr("img", "src"),
-							AnimeName:     nameAndEpisode,
+							AnimeName:     nameAndEpisode[:id],
 							EpisodeNumber: nameAndEpisode[id:],
 							Link:          e.Request.AbsoluteURL(div.ChildAttr("a", "href")),
 						})
