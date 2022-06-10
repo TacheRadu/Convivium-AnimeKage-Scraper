@@ -10,9 +10,7 @@ import (
 
 func GetRecentAnime(pageNumber int) []types.AnimeEpisode {
 	var res []types.AnimeEpisode
-	c := colly.NewCollector(
-		colly.AllowedDomains("anime-kage.eu"),
-	)
+	c := colly.NewCollector()
 	c.DetectCharset = true
 	c.OnHTML("body", func(e *colly.HTMLElement) {
 		e.ForEach("div.news-item", func(i int, div *colly.HTMLElement) {
@@ -59,9 +57,7 @@ func GetRecentAnime(pageNumber int) []types.AnimeEpisode {
 
 func GetAnime(url string, pageNumber int) types.Anime {
 	var res types.Anime
-	c := colly.NewCollector(
-		colly.AllowedDomains("anime-kage.eu"),
-	)
+	c := colly.NewCollector()
 	c.DetectCharset = true
 	c.OnHTML(".episode-list-picture", func(e *colly.HTMLElement) {
 		res.ImageLink = e.ChildAttr("img", "src")
@@ -112,9 +108,7 @@ func GetAnime(url string, pageNumber int) types.Anime {
 
 func GetPlayerData(url string) types.PlayerData {
 	var res types.PlayerData
-	c := colly.NewCollector(
-		colly.AllowedDomains("anime-kage.eu"),
-	)
+	c := colly.NewCollector()
 	c.DetectCharset = true
 	c.OnHTML(".col-12.col-md-4.left-center-desktop", func(div *colly.HTMLElement) {
 		res.PrevEpisode = div.Request.AbsoluteURL(div.ChildAttr("a", "href"))
