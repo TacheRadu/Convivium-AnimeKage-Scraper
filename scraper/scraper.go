@@ -112,6 +112,9 @@ func GetPlayerData(url string) types.PlayerData {
 	c.DetectCharset = true
 	c.OnHTML(".col-12.col-md-4.left-center-desktop", func(div *colly.HTMLElement) {
 		res.PrevEpisode = div.Request.AbsoluteURL(div.ChildAttr("a", "href"))
+		if res.PrevEpisode == div.Request.AbsoluteURL("") {
+			res.PrevEpisode = ""
+		}
 	})
 	c.OnHTML(".col-12.col-md-4.center", func(div *colly.HTMLElement) {
 		if div.ChildAttr("a", "href") != "" {
