@@ -11,7 +11,7 @@ import (
 func GetRecentAnime(pageNumber int) []types.AnimeEpisode {
 	var res []types.AnimeEpisode
 	c := colly.NewCollector(
-		colly.AllowedDomains("ak476.anime-kage.eu"),
+		colly.AllowedDomains("anime-kage.eu"),
 	)
 	c.DetectCharset = true
 	c.OnHTML("body", func(e *colly.HTMLElement) {
@@ -60,7 +60,7 @@ func GetRecentAnime(pageNumber int) []types.AnimeEpisode {
 func GetAnime(url string, pageNumber int) types.Anime {
 	var res types.Anime
 	c := colly.NewCollector(
-		colly.AllowedDomains("ak476.anime-kage.eu"),
+		colly.AllowedDomains("anime-kage.eu"),
 	)
 	c.DetectCharset = true
 	c.OnHTML(".episode-list-picture", func(e *colly.HTMLElement) {
@@ -113,7 +113,7 @@ func GetAnime(url string, pageNumber int) types.Anime {
 func GetPlayerData(url string) types.PlayerData {
 	var res types.PlayerData
 	c := colly.NewCollector(
-		colly.AllowedDomains("ak476.anime-kage.eu"),
+		colly.AllowedDomains("anime-kage.eu"),
 	)
 	c.DetectCharset = true
 	c.OnHTML(".col-12.col-md-4.left-center-desktop", func(div *colly.HTMLElement) {
